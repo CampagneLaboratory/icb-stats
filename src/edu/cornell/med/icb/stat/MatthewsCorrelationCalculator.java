@@ -29,83 +29,10 @@ import it.unimi.dsi.fastutil.objects.ObjectList;
  *         Date: Apr 23, 2008
  *         Time: 3:23:25 PM
  */
-public class MatthewsCorrelationCalculator {
-    public double optimalThreshold;
-    double mcc;
+public class MatthewsCorrelationCalculator extends PredictionStatisticCalculator {
 
-    /**
-     * Calculates the Matthews Correlation coefficient. Find the maximal MCC value irrespective of
-     * the threshold on the decision value. All the possible thresholds on the decision value
-     * are scanned and the maximum MCC values found is returned.
-     *
-     * @param decisionValueList   Each element of this list should corresponds to a split of evaluation (decision values).
-     * @param labelList           Each element of this list should corresponds to a split of evaluation (true labels).
-     * @return
-     */
-    public double thresholdIndependentMCC(final ObjectList<double[]> decisionValueList, final ObjectList<double[]> labelList) {
-        // any unique decision value is a potential decision threshold:
-        final DoubleSet thresholds = new DoubleArraySet();
-        for (final double[] decisionValues : decisionValueList) {
-            for (final double value : decisionValues) {
-                thresholds.add(value);
-            }
-        }
-        double selectedThreshold = -1;
-        double maxMCC = -2;
-        for (final double threshold : thresholds) {
 
-            final double mccValueAtThreshold = evaluateMCC(threshold, decisionValueList, labelList);
-            if (mccValueAtThreshold > maxMCC) {
-                maxMCC = mccValueAtThreshold;
-                selectedThreshold = threshold;
-            }
-        }
-        mcc = maxMCC;
-        optimalThreshold = selectedThreshold;
-        return mcc;
-    }
 
-    public double evaluateMCC(final double threshold, final ObjectList<double[]> decisionValueList, final ObjectList<double[]> labelList) {
-        double averageMCC = 0;
-        double count = 0;
-        for (int i = 0; i < decisionValueList.size(); i++) {
-            final double mccSingleSplit = evaluateMCC(threshold, decisionValueList.get(i), labelList.get(i));
-            averageMCC += mccSingleSplit;
-            count++;
-        }
-        return averageMCC / count;
-    }
-
-    /**
-     * Calculates the Matthews Correlation coefficient. Find the maximal MCC value irrespective of
-     * the threshold on the decision value. All the possible thresholds on the decision value
-     * are scanned and the maximum MCC values found is returned.
-     *
-     * @param decisionValues
-     * @param labels
-     * @return
-     */
-    public double thresholdIndependentMCC(final double[] decisionValues, final double[] labels) {
-        // any unique decision value is a potential decision threshold:
-        final DoubleSet thresholds = new DoubleArraySet();
-        for (final double value : decisionValues) {
-            thresholds.add(value);
-        }
-
-        double selectedThreshold = -1;
-        double maxMCC = -2;
-        for (final double threshold : thresholds) {
-
-            final double mccValueAtThreshold = evaluateMCC(threshold, decisionValues, labels);
-            if (mccValueAtThreshold > maxMCC) {
-                maxMCC = mccValueAtThreshold;
-                selectedThreshold = threshold;
-            }
-        }
-        mcc = maxMCC;
-        optimalThreshold = selectedThreshold;
-        return mcc;
-    }
 
     /**
      * Evaluate the Mathews Correlation coefficient for a given decision function threshold.
@@ -161,14 +88,7 @@ public class MatthewsCorrelationCalculator {
         return value;
     }
 
-    public double thresholdIndependentMCCStd(final ObjectList<double[]> decisionValueList, final ObjectList<double[]> trueLabelList) {
-    final ZScoreCalculator calc=new ZScoreCalculator();
-
-        for (int i = 0; i < decisionValueList.size(); i++) {
-            final double mccSingleSplit = evaluateMCC(optimalThreshold, decisionValueList.get(i), trueLabelList.get(i));
-            calc.observe(mccSingleSplit);
-        }
-         calc.calculateStats();
-        return calc.stdDev();
+    public double evaluateStatisticAtThreshold(double threshold, double[] decisionValues, double[] labels) {
+        return evaluateMCC(threshold,  decisionValues, labels);
     }
 }
