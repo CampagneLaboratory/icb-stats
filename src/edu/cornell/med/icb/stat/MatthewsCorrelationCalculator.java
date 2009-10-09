@@ -30,9 +30,9 @@ import it.unimi.dsi.fastutil.objects.ObjectList;
  *         Time: 3:23:25 PM
  */
 public class MatthewsCorrelationCalculator extends PredictionStatisticCalculator {
-
-
-
+    public MatthewsCorrelationCalculator() {
+        highestStatisticIsBest = true;
+    }
 
     /**
      * Evaluate the Mathews Correlation coefficient for a given decision function threshold.
@@ -86,6 +86,10 @@ public class MatthewsCorrelationCalculator extends PredictionStatisticCalculator
             value = 0;
         }
         return value;
+    }
+
+    public String getMeasureName() {
+        return "MCC";
     }
 
     public double evaluateStatisticAtThreshold(double threshold, double[] decisionValues, double[] labels) {

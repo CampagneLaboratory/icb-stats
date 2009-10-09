@@ -12,10 +12,18 @@ import org.apache.commons.logging.LogFactory;
  *         Time: 5:42:26 PM
  */
 public class AreaUnderTheRocCurveCalculator extends PredictionStatisticCalculator {
+    public String getMeasureName() {
+        return "auc";
+    }
+
     /**
      * Used to log debug and informational messages.
      */
     private static final Log LOG = LogFactory.getLog(AreaUnderTheRocCurveCalculator.class);
+
+    public AreaUnderTheRocCurveCalculator() {
+        highestStatisticIsBest = true;
+    }
 
     public double evaluateStatisticAtThreshold(double threshold, double[] decisionValues, double[] labels) {
         return Double.NaN;
@@ -49,7 +57,7 @@ public class AreaUnderTheRocCurveCalculator extends PredictionStatisticCalculato
             for (double decisionNegative : trueNegativeDecisions) {
                 sum += decisionPositive > decisionNegative ? 1 : 0;
                 sum += decisionPositive == decisionNegative ? 0.5 : 0;
-               
+
             }
 
         }
@@ -60,6 +68,7 @@ public class AreaUnderTheRocCurveCalculator extends PredictionStatisticCalculato
         double auc = sum / numPositive / numNegative;
         return auc;
     }
+
 
     /**
      * Calculates the optimal statistic at any decision threshold. All the possible thresholds on the decision value
@@ -94,34 +103,4 @@ public class AreaUnderTheRocCurveCalculator extends PredictionStatisticCalculato
     }
 
 
-    /**
-     * The overall performance of a classification model can be measured at all possible thresholds by
-     integrating the area under the receiver operating characteristic curve, i.e., AUC. We can compute
-     AUC using the formula where xi and yj are continuous classifier outputs for positive and negative
-     samples, respectively.
-     ? ??
-     ?
-     ? ?? ? = ?? > + ?? =
-     + ? + ?
-     = = = =
-     + ?
-     N
-     i
-     N
-     j
-     i j
-     N
-     i
-     N
-     j
-     i j I x y I x y
-     N N
-     AUC
-     1 1 1 1
-     ( )
-     2
-     1 ( ) 1
-     ,
-     Note that in the case of ties, the summation is weighted by 0.5.
-     */
 }

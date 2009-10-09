@@ -13,6 +13,7 @@ public abstract class PredictionStatisticCalculator {
     public double optimalThreshold;
     protected double statistic;
     protected boolean highestStatisticIsBest = false;
+    public abstract String getMeasureName();
 
     /**
      * Calculates the optimal statistic at any decision threshold. All the possible thresholds on the decision value
@@ -74,11 +75,11 @@ public abstract class PredictionStatisticCalculator {
         for (final double threshold : thresholds) {
 
             final double statisticsValueAtThreshold = evaluateStatisticAtThreshold(threshold, decisionValues, labels);
-            if (highestStatisticIsBest && statisticsValueAtThreshold > optimalStatistic) {
+            if (highestStatisticIsBest && statisticsValueAtThreshold >= optimalStatistic) {
                 optimalStatistic = statisticsValueAtThreshold;
                 selectedThreshold = threshold;
             } else {
-                if (!highestStatisticIsBest && statisticsValueAtThreshold < optimalStatistic) {
+                if (!highestStatisticIsBest && statisticsValueAtThreshold <= optimalStatistic) {
                     optimalStatistic = statisticsValueAtThreshold;
                     selectedThreshold = threshold;
                 }
