@@ -13,7 +13,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class AreaUnderTheRocCurveCalculator extends PredictionStatisticCalculator {
     public String getMeasureName() {
-        return "auc";
+        return "AUC";
     }
 
     /**
@@ -27,7 +27,7 @@ public class AreaUnderTheRocCurveCalculator extends PredictionStatisticCalculato
     }
 
     public double evaluateStatisticAtThreshold(double threshold, double[] decisionValues, double[] labels) {
-        return Double.NaN;
+        return statistic;
     }
 
     public double thresholdIndependentStatistic(final double[] decisionValues, final double[] labels) {
@@ -67,6 +67,7 @@ public class AreaUnderTheRocCurveCalculator extends PredictionStatisticCalculato
         numNegative = trueNegativeDecisions.size();
 
         double auc = sum / numPositive / numNegative;
+        statistic=auc;
         return auc;
     }
 
