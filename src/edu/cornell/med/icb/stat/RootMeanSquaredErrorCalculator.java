@@ -5,8 +5,9 @@ import it.unimi.dsi.fastutil.objects.ObjectList;
 /**
  * Calculates the root mean squared error (RMSE). This measure is independent of any threshold. The RMSE should be used
  * only for regression, when the decision value is expected to be on the same scale as the label.
- * 
+ * <p/>
  * See definition at http://cran.r-project.org/web/packages/ROCR/ROCR.pdf
+ *
  * @author Fabien Campagne
  *         Date: Oct 9, 2009
  *         Time: 3:44:20 PM
@@ -18,6 +19,7 @@ public class RootMeanSquaredErrorCalculator extends PredictionStatisticCalculato
 
     public RootMeanSquaredErrorCalculator() {
         highestStatisticIsBest = true;
+        zero = 0;
     }
 
     public double evaluateStatisticAtThreshold(double threshold, double[] decisionValues, double[] labels) {
@@ -28,7 +30,7 @@ public class RootMeanSquaredErrorCalculator extends PredictionStatisticCalculato
             meanSquareError += error * error;
 
         }
-        meanSquareError/=(double)decisionValues.length;
+        meanSquareError /= (double) decisionValues.length;
         return Math.sqrt(meanSquareError);
 
     }

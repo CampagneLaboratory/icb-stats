@@ -4,15 +4,32 @@ import it.unimi.dsi.fastutil.objects.ObjectList;
 import it.unimi.dsi.fastutil.doubles.DoubleSet;
 import it.unimi.dsi.fastutil.doubles.DoubleArraySet;
 
+import java.util.Collections;
+
 /**
  * @author Fabien Campagne
  *         Date: Oct 8, 2009
  *         Time: 5:22:59 PM
  */
 public abstract class PredictionStatisticCalculator {
+    /**
+     * The value of the threshold where the optimal statistic is obtained.
+     */
     public double optimalThreshold;
+    /**
+     * The value of the statistic.
+     */
     protected double statistic;
+    /**
+     * Indicates that a larger statistic represents a better predictor performance.
+     */
     protected boolean highestStatisticIsBest = false;
+    /**
+     * This value indicates the value of the performance statistics that would be obtained if the prediction
+     * was completely random.
+     */
+    protected double zero = 0;
+
     public abstract String getMeasureName();
 
     /**
@@ -34,24 +51,34 @@ public abstract class PredictionStatisticCalculator {
                 thresholds.add(value);
             }
         }
+
         double selectedThreshold = -1;
         double optimalStatistic = highestStatisticIsBest ? Double.MIN_VALUE : Double.MAX_VALUE;
         for (final double threshold : thresholds) {
 
             final double statisticsValueAtThreshold = evaluateStatisticAtThreshold(threshold, decisionValueList, labelList);
-            if (highestStatisticIsBest && statisticsValueAtThreshold > optimalStatistic) {
+            if (predictivePotential(statisticsValueAtThreshold) > predictivePotential(optimalStatistic)) {
+
                 optimalStatistic = statisticsValueAtThreshold;
                 selectedThreshold = threshold;
-            } else {
-                if (!highestStatisticIsBest && statisticsValueAtThreshold < optimalStatistic) {
-                    optimalStatistic = statisticsValueAtThreshold;
-                    selectedThreshold = threshold;
-                }
+                System.out.println(String.format("optimalStatistic: %f %f", optimalStatistic, selectedThreshold));
             }
         }
         statistic = optimalStatistic;
         optimalThreshold = selectedThreshold;
         return statistic;
+    }
+
+    /**
+     * Return a value that is larger when the statistics indicates a larger predictive potential. Absolute value is taken
+     * because values below 'zero' indicate predictive ability as well (just anti-correlated with the correct prediction).
+     * The 'zero' used here is the value of the performance metric that indicates random prediction.
+     *
+     * @param statisticsValueAtThreshold
+     * @return
+     */
+    protected double predictivePotential(double statisticsValueAtThreshold) {
+        return Math.abs(statisticsValueAtThreshold - zero);
     }
 
     /**
@@ -75,11 +102,11 @@ public abstract class PredictionStatisticCalculator {
         for (final double threshold : thresholds) {
 
             final double statisticsValueAtThreshold = evaluateStatisticAtThreshold(threshold, decisionValues, labels);
-            if (highestStatisticIsBest && statisticsValueAtThreshold >= optimalStatistic) {
+            if (highestStatisticIsBest && statisticsValueAtThreshold > optimalStatistic) {
                 optimalStatistic = statisticsValueAtThreshold;
                 selectedThreshold = threshold;
             } else {
-                if (!highestStatisticIsBest && statisticsValueAtThreshold <= optimalStatistic) {
+                if (!highestStatisticIsBest && statisticsValueAtThreshold < optimalStatistic) {
                     optimalStatistic = statisticsValueAtThreshold;
                     selectedThreshold = threshold;
                 }
@@ -100,7 +127,8 @@ public abstract class PredictionStatisticCalculator {
         calc.calculateStats();
         return calc.stdDev();
     }
-      /**
+
+    /**
      * Calculate the standard error of the mean of the statistic.
      * Return Std of the statistic divided by the square root of the number of observations.
      *
@@ -113,6 +141,7 @@ public abstract class PredictionStatisticCalculator {
 
         return thresholdIndependentStatisticStd(decisionValueList, trueLabelList) / Math.sqrt(decisionValueList.size());
     }
+
     public double evaluateStatisticAtThreshold(final double threshold, final ObjectList<double[]> decisionValueList, final ObjectList<double[]> labelList) {
         double averageStatistic = 0;
         double count = 0;

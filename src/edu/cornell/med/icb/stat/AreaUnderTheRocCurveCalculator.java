@@ -23,6 +23,7 @@ public class AreaUnderTheRocCurveCalculator extends PredictionStatisticCalculato
 
     public AreaUnderTheRocCurveCalculator() {
         highestStatisticIsBest = true;
+        zero=0.5;
     }
 
     public double evaluateStatisticAtThreshold(double threshold, double[] decisionValues, double[] labels) {
