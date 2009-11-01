@@ -14,7 +14,7 @@ import it.unimi.dsi.fastutil.objects.ObjectList;
  */
 public class RootMeanSquaredErrorCalculator extends PredictionStatisticCalculator {
     public String getMeasureName() {
-        return "RMSEjava";
+        return "RMSE";
     }
 
     public RootMeanSquaredErrorCalculator() {

@@ -29,6 +29,71 @@ public abstract class PredictionStatisticCalculator {
      * was completely random.
      */
     protected double zero = 0;
+    /**
+     * The contingency table, number of true positives.
+     */
+    double TP;
+    /**
+     * The contingency table, number of true negatives.
+     */
+    double TN;
+    /**
+     * The contingency table, number of false negatives.
+     */
+    double FN;
+    /**
+     * The contingency table, number of false positives.
+     */
+    double FP;
+
+    /**
+     * Evaluate the contingency table at a specific threshold. The values of TP, TN, FP, FN are populated when this method
+     * returns. The parameters decisionValues and labels are not modified.
+     * @param threshold
+     * @param decisionValues
+     * @param labels
+     */
+    protected void evaluateContingencyTable(final double threshold, final double[] decisionValues, final double[] labels) {
+            final double[] copyOfDecisionValues = new double[decisionValues.length];
+            System.arraycopy(decisionValues, 0, copyOfDecisionValues, 0, decisionValues.length);
+            // make decision binary according to threshold:
+
+            for (int i = 0; i < copyOfDecisionValues.length; i++) {
+                if (copyOfDecisionValues[i] < threshold) {
+                    copyOfDecisionValues[i] = 0;
+                } else {
+                    copyOfDecisionValues[i] = 1;
+                }
+
+            }
+            int tp = 0;
+            int tn = 0;
+            int fn = 0;
+            int fp = 0;
+            for (int i = 0; i < copyOfDecisionValues.length; i++) {
+                final double binaryDecision = copyOfDecisionValues[i];
+                final double trueLabel = labels[i];
+                if (trueLabel == 1) {
+                    if (binaryDecision == 1) {
+                        tp++;
+                    } else {
+                        fn++;
+                    }
+                } else { // True label=0
+                    if (binaryDecision == 0) {
+                        tn++;
+                    } else {
+                        fp++;
+                    }
+                }
+            }
+            TP = tp;
+            TN = tn;
+            FN = fn;
+            FP = fp;
+        }
+
+
 
     public abstract String getMeasureName();
 
