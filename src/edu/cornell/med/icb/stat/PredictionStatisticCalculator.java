@@ -126,7 +126,7 @@ public abstract class PredictionStatisticCalculator {
 
                 optimalStatistic = statisticsValueAtThreshold;
                 selectedThreshold = threshold;
-                System.out.println(String.format("optimalStatistic: %f %f", optimalStatistic, selectedThreshold));
+            //    System.out.println(String.format("optimalStatistic: %f %f", optimalStatistic, selectedThreshold));
             }
         }
         statistic = optimalStatistic;
