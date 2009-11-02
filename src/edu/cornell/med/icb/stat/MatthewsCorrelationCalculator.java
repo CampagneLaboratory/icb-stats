@@ -38,6 +38,7 @@ public class MatthewsCorrelationCalculator extends PredictionStatisticCalculator
 
     public MatthewsCorrelationCalculator() {
         highestStatisticIsBest = true;
+        zero = 0;
     }
 
     /**
