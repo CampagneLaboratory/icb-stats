@@ -30,15 +30,16 @@ import it.unimi.dsi.fastutil.objects.ObjectList;
  *         Time: 3:23:25 PM
  */
 public class MatthewsCorrelationCalculator extends PredictionStatisticCalculator {
- public String getMeasureName() {
+    public String getMeasureName() {
         return "MCC";
     }
+
     private double mcc;
 
     public MatthewsCorrelationCalculator() {
         highestStatisticIsBest = true;
     }
-   
+
     /**
      * Evaluate the Mathews Correlation coefficient for a given decision function threshold.
      *
@@ -47,43 +48,7 @@ public class MatthewsCorrelationCalculator extends PredictionStatisticCalculator
      * @param labels
      */
     public double evaluateMCC(final double threshold, final double[] decisionValues, final double[] labels) {
-        final double[] copyOfDecisionValues = new double[decisionValues.length];
-        System.arraycopy(decisionValues, 0, copyOfDecisionValues, 0, decisionValues.length);
-        // make decision binary according to threshold:
-
-        for (int i = 0; i < copyOfDecisionValues.length; i++) {
-            if (copyOfDecisionValues[i] < threshold) {
-                copyOfDecisionValues[i] = 0;
-            } else {
-                copyOfDecisionValues[i] = 1;
-            }
-
-        }
-        int tp = 0;
-        int tn = 0;
-        int fn = 0;
-        int fp = 0;
-        for (int i = 0; i < copyOfDecisionValues.length; i++) {
-            final double binaryDecision = copyOfDecisionValues[i];
-            final double trueLabel = labels[i];
-            if (trueLabel == 1) {
-                if (binaryDecision == 1) {
-                    tp++;
-                } else {
-                    fn++;
-                }
-            } else { // True label=0
-                if (binaryDecision == 0) {
-                    tn++;
-                } else {
-                    fp++;
-                }
-            }
-        }
-        final double TP = tp;
-        final double TN = tn;
-        final double FN = fn;
-        final double FP = fp;
+        evaluateContingencyTable(threshold, decisionValues, labels);
         double value = (TP * TN - FP * FN) /
                 Math.sqrt((TP + FP) * (TP + FN) * (TN + FP) * (TN + FN));
         if (value != value) {
@@ -92,7 +57,6 @@ public class MatthewsCorrelationCalculator extends PredictionStatisticCalculator
         }
         return value;
     }
-
 
 
     public double evaluateStatisticAtThreshold(double threshold, double[] decisionValues, double[] labels) {
