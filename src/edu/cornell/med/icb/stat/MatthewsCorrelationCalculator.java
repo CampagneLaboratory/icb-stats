@@ -18,10 +18,6 @@
 
 package edu.cornell.med.icb.stat;
 
-import it.unimi.dsi.fastutil.doubles.DoubleArraySet;
-import it.unimi.dsi.fastutil.doubles.DoubleSet;
-import it.unimi.dsi.fastutil.objects.ObjectList;
-
 /**
  * Calculates the Matthews Correlation coefficient.
  *
@@ -30,6 +26,7 @@ import it.unimi.dsi.fastutil.objects.ObjectList;
  *         Time: 3:23:25 PM
  */
 public class MatthewsCorrelationCalculator extends PredictionStatisticCalculator {
+    @Override
     public String getMeasureName() {
         return "MCC";
     }
@@ -50,17 +47,14 @@ public class MatthewsCorrelationCalculator extends PredictionStatisticCalculator
      */
     public double evaluateMCC(final double threshold, final double[] decisionValues, final double[] labels) {
         evaluateContingencyTable(threshold, decisionValues, labels);
-        double value = (TP * TN - FP * FN) /
+        final double value = (TP * TN - FP * FN) /
                 Math.sqrt((TP + FP) * (TP + FN) * (TN + FP) * (TN + FN));
-        if (value != value) {
-            // NaN
-            value = 0;
-        }
         return value;
     }
 
 
-    public double evaluateStatisticAtThreshold(double threshold, double[] decisionValues, double[] labels) {
+    @Override
+    public double evaluateStatisticAtThreshold(final double threshold, final double[] decisionValues, final double[] labels) {
         return evaluateMCC(threshold, decisionValues, labels);
     }
 }
