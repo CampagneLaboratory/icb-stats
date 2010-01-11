@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2009 Institute for Computational Biomedicine,
+ * Copyright (C) 2008-2010 Institute for Computational Biomedicine,
  *                         Weill Medical College of Cornell University
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -26,6 +26,7 @@ package edu.cornell.med.icb.stat;
  *         Time: 3:23:25 PM
  */
 public class SpecificityCalculator extends PredictionStatisticCalculator {
+    @Override
     public String getMeasureName() {
         return "Specificity";
     }
@@ -56,7 +57,8 @@ public class SpecificityCalculator extends PredictionStatisticCalculator {
     }
 
 
-    public double evaluateStatisticAtThreshold(double threshold, double[] decisionValues, double[] labels) {
+    @Override
+    public double evaluateStatisticAtThreshold(final double threshold, final double[] decisionValues, final double[] labels) {
         return evaluateSpecificity(threshold, decisionValues, labels);
     }
 }

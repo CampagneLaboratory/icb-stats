@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2009 Institute for Computational Biomedicine,
+ * Copyright (C) 2008-2010 Institute for Computational Biomedicine,
  *                         Weill Medical College of Cornell University
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -18,12 +18,12 @@
 
 package edu.cornell.med.icb.stat;
 
-import org.junit.Test;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
+import org.junit.Test;
 
 /**
- * Test the LinearRegression class. 
+ * Test the LinearRegression class.
  * @author Kevin Dorff
  */
 public class TestLinearRegression {

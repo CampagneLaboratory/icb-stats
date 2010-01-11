@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2008-2009 Institute for Computational Biomedicine,
+ * Copyright (C) 2008-2010 Institute for Computational Biomedicine,
  *                         Weill Medical College of Cornell University
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -18,10 +18,6 @@
 
 package edu.cornell.med.icb.stat;
 
-import it.unimi.dsi.fastutil.doubles.DoubleArraySet;
-import it.unimi.dsi.fastutil.doubles.DoubleSet;
-import it.unimi.dsi.fastutil.objects.ObjectList;
-
 /**
  * Calculates the accuracy of predictions.
  *
@@ -30,6 +26,7 @@ import it.unimi.dsi.fastutil.objects.ObjectList;
  *         Time: 3:23:25 PM
  */
 public class AccuracyCalculator extends PredictionStatisticCalculator {
+    @Override
     public String getMeasureName() {
         return "Accuracy";
     }
@@ -37,8 +34,6 @@ public class AccuracyCalculator extends PredictionStatisticCalculator {
     public AccuracyCalculator() {
         highestStatisticIsBest = true;
     }
-
-
 
     /**
      * Evaluate the accuracy for a given decision function threshold.
@@ -61,7 +56,8 @@ public class AccuracyCalculator extends PredictionStatisticCalculator {
     }
 
 
-    public double evaluateStatisticAtThreshold(double threshold, double[] decisionValues, double[] labels) {
+    @Override
+    public double evaluateStatisticAtThreshold(final double threshold, final double[] decisionValues, final double[] labels) {
         return evaluateAccuracy(threshold, decisionValues, labels);
     }
 }

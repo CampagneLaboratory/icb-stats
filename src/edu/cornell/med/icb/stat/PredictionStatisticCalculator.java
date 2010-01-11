@@ -1,10 +1,26 @@
+/*
+ * Copyright (C) 2009-2010 Institute for Computational Biomedicine,
+ *                         Weill Medical College of Cornell University
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package edu.cornell.med.icb.stat;
 
-import it.unimi.dsi.fastutil.objects.ObjectList;
-import it.unimi.dsi.fastutil.doubles.DoubleSet;
 import it.unimi.dsi.fastutil.doubles.DoubleArraySet;
-
-import java.util.Collections;
+import it.unimi.dsi.fastutil.doubles.DoubleSet;
+import it.unimi.dsi.fastutil.objects.ObjectList;
 
 /**
  * @author Fabien Campagne
@@ -23,12 +39,12 @@ public abstract class PredictionStatisticCalculator {
     /**
      * Indicates that a larger statistic represents a better predictor performance.
      */
-    protected boolean highestStatisticIsBest = false;
+    protected boolean highestStatisticIsBest;
     /**
-     * This value indicates the value of the performance statistics that would be obtained if the prediction
-     * was completely random.
+     * This value indicates the value of the performance statistics that would be obtained
+     * if the prediction was completely random.
      */
-    protected double zero = 0;
+    protected double zero;
     /**
      * The contingency table, number of true positives.
      */
@@ -142,7 +158,7 @@ public abstract class PredictionStatisticCalculator {
      * @param statisticsValueAtThreshold
      * @return
      */
-    protected double predictivePotential(double statisticsValueAtThreshold) {
+    protected double predictivePotential(final double statisticsValueAtThreshold) {
         return Math.abs(statisticsValueAtThreshold - zero);
     }
 
